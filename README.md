@@ -8,6 +8,7 @@ Cel projektu:
 
 -Późniejsza możliwość rozbudowy już gotowej infrastruktury o dodatkowe elementy
 
+
 Założenia projektu:
 
 -Przyciski zamontowane pod ekranem do komunikacji z urządzeniem
