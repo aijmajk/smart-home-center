@@ -22,24 +22,46 @@ Założenia projektu:
 -Wybór wygaszacza *
 
 Technologie i urządzenia:
+
 -Raspberry PI 2 model B
+
 -monitor
+
 -domofon
+
 -kamerka do domofonu
+
 -Python
+
 -Pygame
+
 -api do prognozy pogody
+
 -C++
 
+
+
 Harmonogram projektu:
+
 Kwiecień:
+
 -software urządzenia sterującego
+
 -prognoza pogody
+
 -wygaszacze ekranu *
+
 Maj:
+
 -konstrukcja domofonu
+
 -oprogramowanie go + montaż w obudowie starego domofonu
+
 -moduł kamerki *
+
 Czerwiec:
+
 -szlify wcześniej wykonanych rzeczy
+
 -prezentacja projektu
+
