@@ -3,17 +3,18 @@ import time
 pygame.font.init()
 
 
-class Screen:
+class Screen(pygame.Surface):
     def __init__(self, screen_w, screen_h, font, fontcolor):
-        self.screen = pygame.Surface((screen_w, screen_h))
+        pygame.Surface.__init__(self, (screen_w, screen_h))
+        #self.screen = pygame.Surface((screen_w, screen_h))
         self.dateScreen = pygame.Surface((screen_w/2, screen_h/10))
         self.timeScreen = pygame.Surface((screen_w/2, screen_h/10))
 
-        self.font = pygame.font.SysFont(font, screen_w/12)
+        self.font = pygame.font.SysFont(font, int(screen_w/12))
         self.fontcolor = fontcolor
 
     def clear_screen(self):
-        self.screen.fill((0, 0, 0))
+        self.fill((0, 0, 0))
         self.dateScreen.fill((0, 255, 145))
         self.timeScreen.fill((255, 255, 0))
 
@@ -55,14 +56,15 @@ class Screen:
     def draw(self):
         """rgreg"""
         # CLEAR THE SCREENS
-        self.screen.fill((155, 0, 0))
+        self.fill((155, 0, 0))
         self.timeScreen.fill((100, 0, 100))
-        #self.dateScreen.fill((0, 155, 0))
+        self.dateScreen.fill((0, 155, 0))
         # blit time screen
-        #self.timeScreen.blit(self.update_time_screen(), (0, 0))
+        self.timeScreen.blit(self.update_time_screen(), (0, 0))
         # blit date screen
-        #self.dateScreen.blit(self.update_date_screen(), (0, 0))
+        self.dateScreen.blit(self.update_date_screen(), (0, 0))
 
         # BLIT EVERYTHING ONTO MAIN SCREEN
-        self.screen.blit(self.timeScreen, (0, 0))
-        #self.screen.blit(self.dateScreen, (0, self.timeScreen.get_height()))
+        self.blit(self.dateScreen, (0, 0))
+        self.blit(self.timeScreen, (0, self.dateScreen.get_height()))
+
