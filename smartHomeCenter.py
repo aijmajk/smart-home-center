@@ -11,10 +11,11 @@ screen_w = Ds.setupFile["screen_w"]
 screen_h = Ds.setupFile["screen_h"]
 fullscreen = Ds.setupFile["fullscreen"]
 fontcolor = Ds.setupFile["fontcolor"]
+font = "./assets/fonts/OpenSans-Regular.ttf"
 
 screen = pygame.display.set_mode((screen_w, screen_h), 0, 32)
 pygame.display.set_caption('smart home center')
-firstscreen = mainscreen.Screen(screen_w, screen_h, "./assets/fonts/OpenSans-Regular.ttf", fontcolor)
+firstscreen = mainscreen.Screen(screen_w, screen_h, font, fontcolor)
 
 while True:
     # Events
