@@ -1,36 +1,52 @@
 import pygame
+from pygame.locals import *
+import sys
 import time
-pygame.font.init()
 
 
 class Screen(pygame.Surface):
     def __init__(self, screen_w, screen_h, font, fontcolor):
         pygame.Surface.__init__(self, (screen_w, screen_h))
-        #self.screen = pygame.Surface((screen_w, screen_h))
-        self.dateScreen = pygame.Surface((screen_w/2, screen_h/10))
-        self.timeScreen = pygame.Surface((screen_w/2, screen_h/10))
 
-        self.font = pygame.font.SysFont(font, int(screen_w/12))
+        # fonts
+        screen_measurements = max(screen_w, screen_h)
+        self.verySmallFont = pygame.font.Font(font, int(screen_measurements/35))
+        self.smallFont = pygame.font.Font(font, int(screen_measurements/25))
+        self.normalFont = pygame.font.Font(font, int(screen_measurements/12))
+        self.bigFont = pygame.font.Font(font, int(screen_measurements/10))
         self.fontcolor = fontcolor
 
-    def clear_screen(self):
-        self.fill((0, 0, 0))
-        self.dateScreen.fill((0, 255, 145))
-        self.timeScreen.fill((255, 255, 0))
+        # fonts heights
+        self.verySmallHeight = self.verySmallFont.get_height()
+        self.smallHeight = self.smallFont.get_height()
+        self.normalHeight = self.normalFont.get_height()
+        self.bigHeight = self.bigFont.get_height()
 
-    def update_time_screen(self):
+        # surfaces
+        self.screen = pygame.Surface((screen_w-100, screen_h-100))
+        self.dateScreen = pygame.Surface((self.screen.get_width()/2, self.smallHeight))
+        self.timeScreen = pygame.Surface((self.screen.get_width()/2, self.normalHeight))
+        self.weekScreen = pygame.Surface((self.screen.get_width()/2, self.verySmallHeight))
+
+        # starting height drawing point
+        self.dateStartingHeight = 0
+        self.timeStartingHeight = self.dateScreen.get_height()
+        self.weekStartingHeight = self.timeStartingHeight + self.timeScreen.get_height()
+
+    def update_time_screen(self, current_time):
         """returns current time in H:M:S format"""
-        current_time = time.localtime()
         hours = str(current_time[3])
         minutes = str(current_time[4])
         seconds = str(current_time[5])
+        if len(hours) == 1:
+            hours = "0"+hours
         if len(minutes) == 1:
             minutes = "0"+minutes
         if len(seconds) == 1:
             seconds = "0"+seconds
-        return self.font.render(hours+":"+minutes+":"+seconds, True, self.fontcolor)
+        return self.normalFont.render(hours+":"+minutes+":"+seconds, True, self.fontcolor)
 
-    def update_date_screen(self):
+    def update_date_screen(self, current_time):
         """returns current date in string in 'D M Y' format"""
         month_name = {
             1: "Stycznia",
@@ -47,24 +63,45 @@ class Screen(pygame.Surface):
             12: "Grudnia",
         }
 
-        current_time = time.localtime()
         year = str(current_time[0])
         month = month_name[current_time[1]]
         day = str(current_time[2])
-        return self.font.render(day+" "+month+""+year, True, self.fontcolor)
+        return self.smallFont.render(day+" "+month+" "+year, True, self.fontcolor)
+
+    def update_week_screen(self, current_time):
+        """returns current week in year"""
+        week = current_time[7]/7
+        if week % 1 >= 0.5:
+            week = str(int(week)+1)
+        else:
+            week = str(int(week))
+        return self.verySmallFont.render(week+" tydzień roku", True, self.fontcolor)
 
     def draw(self):
-        """rgreg"""
+        """Draws everything on itself, based on the info provided in class.
+         After resolving this module, object is ready to blit on designated surface"""
         # CLEAR THE SCREENS
+        # self.fill((0, 0, 0))
+        # self.screen.fill((0, 0, 0))
+        # self.timeScreen.fill((0, 0, 0))
+        # self.dateScreen.fill((0, 0, 0))
+        # self.weekScreen.fill((0, 0, 0))
+
         self.fill((155, 0, 0))
+        self.screen.fill((0, 255, 0))
         self.timeScreen.fill((100, 0, 100))
         self.dateScreen.fill((0, 155, 0))
+        self.weekScreen.fill((0, 0, 200))
+
         # blit time screen
-        self.timeScreen.blit(self.update_time_screen(), (0, 0))
+        self.timeScreen.blit(self.update_time_screen(time.localtime()), (0, 0))
         # blit date screen
-        self.dateScreen.blit(self.update_date_screen(), (0, 0))
+        self.dateScreen.blit(self.update_date_screen(time.localtime()), (0, 0))
+        # blit week screen
+        self.weekScreen.blit(self.update_week_screen(time.localtime()), (0, 0))
 
         # BLIT EVERYTHING ONTO MAIN SCREEN
-        self.blit(self.dateScreen, (0, 0))
-        self.blit(self.timeScreen, (0, self.dateScreen.get_height()))
-
+        self.screen.blit(self.dateScreen, (0, self.dateStartingHeight))
+        self.screen.blit(self.timeScreen, (0, self.timeStartingHeight))
+        self.screen.blit(self.weekScreen, (0, self.weekStartingHeight))
+        self.blit(self.screen, (50, 50))

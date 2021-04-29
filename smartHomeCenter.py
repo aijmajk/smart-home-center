@@ -4,16 +4,16 @@ from pygame.locals import *
 import mainscreen
 
 pygame.init()
+pygame.font.init()
 
 screen_w = 1280
 screen_h = 1024
 fullscreen = 0
 fontcolor = (255, 255, 255)
-fontsize = 50
 
 screen = pygame.display.set_mode((screen_w, screen_h), 0, 32)
-firstscreen = mainscreen.Screen(screen_w, screen_h, "cmap", fontcolor)
-# myfont = pygame.font.SysFont("cmap", fontsize)
+pygame.display.set_caption('smart home center')
+firstscreen = mainscreen.Screen(screen_w, screen_h, "./assets/fonts/OpenSans-Regular.ttf", fontcolor)
 
 while True:
     # Events
