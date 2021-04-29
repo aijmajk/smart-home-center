@@ -2,14 +2,15 @@ import pygame
 import sys
 from pygame.locals import *
 import mainscreen
+import deviceSetup as Ds
 
 pygame.init()
 pygame.font.init()
 
-screen_w = 1280
-screen_h = 1024
-fullscreen = 0
-fontcolor = (255, 255, 255)
+screen_w = Ds.setupFile["screen_w"]
+screen_h = Ds.setupFile["screen_h"]
+fullscreen = Ds.setupFile["fullscreen"]
+fontcolor = Ds.setupFile["fontcolor"]
 
 screen = pygame.display.set_mode((screen_w, screen_h), 0, 32)
 pygame.display.set_caption('smart home center')
