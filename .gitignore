@@ -1,3 +1,11 @@
 .idea
 venv
 __pycache__/
+token.json
+Setup.json.save
+callendar.py
+client_secret_471264614964-o3d17t2gkbsledva2cne9rafrrts5bbr.apps.googleusercontent.com.json
+credentials.json
+hourly.json
+jsonFileSmoother.py
+testHourlyWeather.py

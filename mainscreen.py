@@ -1,7 +1,7 @@
 import pygame
 import time
-
-import weatherForecast
+import currentWeatherForecast
+import hourlyWeatherForecast
 
 
 class Screen(pygame.Surface):
@@ -11,12 +11,14 @@ class Screen(pygame.Surface):
         # variables for updating screen
         self.hours_passed = 0
         self.minutes_passed = 0
-        self.weather_updated = False
+        self.current_weather_updated = False
+        self.hourly_weather_updated = False
         self.date_updated = False
         self.week_updated = False
 
         # fonts
         screen_measurements = max(screen_w, screen_h)
+        self.tiniestFont = pygame.font.Font(font, int(screen_measurements/87))
         self.verySmallFont = pygame.font.Font(font, int(screen_measurements/40))
         self.smallFont = pygame.font.Font(font, int(screen_measurements/25))
         self.normalFont = pygame.font.Font(font, int(screen_measurements/12))
@@ -24,26 +26,30 @@ class Screen(pygame.Surface):
         self.fontcolor = fontcolor
 
         # fonts heights
+        self.tiniestHeight = self.tiniestFont.get_height()
         self.verySmallHeight = self.verySmallFont.get_height()
         self.smallHeight = self.smallFont.get_height()
         self.normalHeight = self.normalFont.get_height()
         self.bigHeight = self.bigFont.get_height()
 
         # surfaces
-        self.screen = pygame.Surface((screen_w-100, screen_h-100))
+        self.screen = pygame.Surface((screen_w-60, screen_h-60))
         self.dateScreen = pygame.Surface((self.screen.get_width()/2, self.smallHeight))
         self.timeScreen = pygame.Surface((self.screen.get_width()/2, self.normalHeight))
         self.weekScreen = pygame.Surface((self.screen.get_width()/2, self.verySmallHeight))
-        self.weatherScreen = pygame.Surface((self.screen.get_width()/2, self.screen.get_height()/2))
+        self.currentWeatherScreen = pygame.Surface((self.screen.get_width() / 2, self.screen.get_height() / 1.78))
+        self.hourlyWeatherScreen = pygame.Surface((self.screen.get_width(), self.screen.get_height() / 2.6))
 
         # starting height drawing point
         self.dateStartingHeight = 0
         self.timeStartingHeight = self.dateScreen.get_height()
         self.weekStartingHeight = self.timeStartingHeight + self.timeScreen.get_height()
         self.weatherStartingHeight = 0
+        self.hourlyWeatherStartingHeight = self.currentWeatherScreen.get_height()
 
         # initial screens blit
-        self.weatherScreen.blit(weatherForecast.update_weather(self.screen.get_width()/2, self.screen.get_height()/2, self.verySmallFont, self.fontcolor, self.verySmallHeight), (0, 0))
+        self.currentWeatherScreen.blit(currentWeatherForecast.update_weather(self.currentWeatherScreen.get_width(), self.currentWeatherScreen.get_height(), self.verySmallFont, self.fontcolor, self.verySmallHeight), (0, 0))
+        self.hourlyWeatherScreen.blit(hourlyWeatherForecast.update_weather(self.hourlyWeatherScreen.get_width(), self.hourlyWeatherScreen.get_height(), self.tiniestFont, self.fontcolor, self.tiniestHeight), (0, 0))
         self.dateScreen.blit(self.update_date_screen(time.localtime()), (0, 0))
         self.weekScreen.blit(self.update_week_screen(time.localtime()), (0, 0))
 
@@ -107,8 +113,8 @@ class Screen(pygame.Surface):
         self.fill((0, 0, 0))
         self.screen.fill((0, 0, 0))
 
-        # self.fill((155, 0, 0))
-        # self.screen.fill((0, 255, 0))
+        #self.fill((155, 0, 0))
+        #self.screen.fill((0, 255, 0))
         # self.timeScreen.fill((100, 0, 100))
         # self.dateScreen.fill((0, 155, 0))
         # self.weekScreen.fill((0, 0, 200))
@@ -135,17 +141,30 @@ class Screen(pygame.Surface):
         else:
             self.date_updated = False
 
-        # weather screen
-        if self.minutes_passed == 0 or self.minutes_passed == 15 or self.minutes_passed == 30 or self.minutes_passed == 45:
-            if not self.weather_updated:
-                self.weatherScreen.blit(weatherForecast.update_weather(self.screen.get_width()/2, self.screen.get_height()/2, self.verySmallFont, self.fontcolor, self.verySmallHeight), (0, 0))
-                self.weather_updated = True
+        # current weather screen
+        if self.minutes_passed == 0 or self.minutes_passed == 10 or self.minutes_passed == 20 or self.minutes_passed == 30 or self.minutes_passed == 40 or self.minutes_passed == 50:
+            if not self.current_weather_updated:
+                self.currentWeatherScreen.blit(currentWeatherForecast.update_weather(self.currentWeatherScreen.get_width(), self.currentWeatherScreen.get_height(), self.verySmallFont, self.fontcolor, self.verySmallHeight), (0, 0))
+                self.current_weather_updated = True
+            else:
+                pass
         else:
-            self.weather_updated = False
+            self.current_weather_updated = False
+
+        # hourly weather screen
+        if self.minutes_passed == 0:
+            if not self.hourly_weather_updated:
+                self.hourlyWeatherScreen.blit(hourlyWeatherForecast.update_weather(self.hourlyWeatherScreen.get_width(), self.hourlyWeatherScreen.get_height(), self.tiniestFont, self.fontcolor, self.tiniestHeight), (0, 0))
+                self.hourly_weather_updated = True
+            else:
+                pass
+        else:
+            self.hourly_weather_updated = False
 
         # BLIT EVERYTHING ONTO MAIN SCREEN
         self.screen.blit(self.dateScreen, (0, self.dateStartingHeight))
         self.screen.blit(self.timeScreen, (0, self.timeStartingHeight))
         self.screen.blit(self.weekScreen, (0, self.weekStartingHeight))
-        self.screen.blit(self.weatherScreen, (self.screen.get_width()/2 + 120, self.weatherStartingHeight - 60))
-        self.blit(self.screen, (50, 50))
+        self.screen.blit(self.currentWeatherScreen, (self.screen.get_width() / 2, self.weatherStartingHeight))
+        self.screen.blit(self.hourlyWeatherScreen, (0, self.hourlyWeatherStartingHeight))
+        self.blit(self.screen, (40, 30))

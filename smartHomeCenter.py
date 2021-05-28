@@ -2,15 +2,15 @@ import pygame
 import sys
 from pygame.locals import *
 import mainscreen
-import deviceSetup as Ds
+from deviceSetup import setupFile
 
 pygame.init()
 pygame.font.init()
 
-screen_w = Ds.setupFile["screen_w"]
-screen_h = Ds.setupFile["screen_h"]
-fullscreen = Ds.setupFile["fullscreen"]
-fontcolor = Ds.setupFile["fontcolor"]
+screen_w = setupFile["main_settings"][0]["screen_w"]
+screen_h = setupFile["main_settings"][0]["screen_h"]
+fullscreen = setupFile["main_settings"][0]["fullscreen"]
+fontcolor = setupFile["main_settings"][0]["fontcolor"]
 font = "./assets/fonts/OpenSans-Regular.ttf"
 
 screen = pygame.display.set_mode((screen_w, screen_h), 0, 32)
