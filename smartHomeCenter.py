@@ -1,17 +1,21 @@
-import pygame, sys, time
+import pygame
+import sys
 from pygame.locals import *
+import mainscreen
+from deviceSetup import setupFile
 
 pygame.init()
 pygame.font.init()
 
-screen_w = 1280
-screen_h = 1024
-fullscreen = 0
-fontcolor = (255, 255, 255)
-fontsize = 50
+screen_w = setupFile["main_settings"][0]["screen_w"]
+screen_h = setupFile["main_settings"][0]["screen_h"]
+fullscreen = setupFile["main_settings"][0]["fullscreen"]
+fontcolor = setupFile["main_settings"][0]["fontcolor"]
+font = "./assets/fonts/OpenSans-Regular.ttf"
 
 screen = pygame.display.set_mode((screen_w, screen_h), 0, 32)
-myfont = pygame.font.SysFont("cmap", fontsize)
+pygame.display.set_caption('smart home center')
+firstscreen = mainscreen.Screen(screen_w, screen_h, font, fontcolor)
 
 while True:
     # Events
@@ -29,23 +33,11 @@ while True:
                 screen = pygame.display.set_mode((screen_w, screen_h), 0, 32)
                 fullscreen = 0
 
-    # TIME
-    current_time = time.localtime()
-    hours = str(current_time[3])
-    minutes = str(current_time[4])
-    seconds = str(current_time[5])
-
-    if len(minutes) == 1:
-        minutes = "0"+minutes
-    if len(seconds) == 1:
-        seconds = "0"+seconds
-    textsurface = myfont.render(hours+":"+minutes+":"+seconds, True, fontcolor)
-
     # DRAW
-        # reset the screen
+    # reset the screen
     screen.fill((0, 0, 0))
-        # clock
-    screen.blit(textsurface, (0, 0))
+    firstscreen.draw()
+    screen.blit(firstscreen, (0, 0))
 
-        # flip the display
+    # flip the display
     pygame.display.flip()

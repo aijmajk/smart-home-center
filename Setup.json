@@ -1,0 +1,20 @@
+{
+	"main_settings" : [
+		{
+			"screen_w" : 1024,
+			"screen_h" : 768,
+			"fullscreen" : 0,
+			"fontcolor" :[255, 255, 255],
+			"lang" : "PL"
+		}
+	],
+	"weather_forecast" : [
+		{
+			"city" : "Lutynia",
+			"lat" : "51.13519",
+			"lon" : "16.78271",
+			"units" : "metric",
+			"api_key" : "92f9fc86bfa069bd0671f4bd412eceb8"
+		}
+	]
+}
