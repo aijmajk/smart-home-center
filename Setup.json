@@ -14,7 +14,7 @@
 			"lat" : "51.13519",
 			"lon" : "16.78271",
 			"units" : "metric",
-			"api_key" : "92f9fc86bfa069bd0671f4bd412eceb8"
+			"api_key" : "enter here your own API key from openweathermap.org"
 		}
 	]
 }
